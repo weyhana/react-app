@@ -1,9 +1,47 @@
+"use client";
 
-
+import { useState, ChangeEvent, SyntheticEvent } from "react";
 import Link from "next/link";
 
+const initialState = {
+  first_name: "",
+  last_name: "",
+  company: "",
+  phone: "",
+  website: "",
+  visitors: "",
+  email: "",
+  password: "",
+  confirm_password: "",
+  remember: false,
+};
 
 export default function Forms() {
+
+    const [formData, setFormData] = useState(initialState);
+
+  // Appelée à chaque modification d'un champ
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value,checked,type } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+  [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  // Appelée quand on clique sur Submit
+  const handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault(); // empêche le rechargement de la page
+
+    if (formData.password !== formData.confirm_password) {
+      console.log("Les mots de passe ne correspondent pas");
+      return;
+    }
+
+    console.log(formData); // affiche les champs renseignés
+    // setFormData(initialState); // réinitialise le formulaire
+  };
+
   return (
     <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
@@ -16,53 +54,53 @@ export default function Forms() {
               Tables
             </Link>
         </div>
-      <form>
-    <div className="grid gap-6 mb-6 md:grid-cols-2">
-        <div>
-            <label  className="block mb-2.5 text-sm font-medium text-heading">First name</label>
-            <input type="text" id="first_name" className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="John" required />
-        </div>
-        <div>
-            <label  className="block mb-2.5 text-sm font-medium text-heading">Last name</label>
-            <input type="text" id="last_name" className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="Doe" required />
-        </div>
-        <div>
-            <label  className="block mb-2.5 text-sm font-medium text-heading">Company</label>
-            <input type="text" id="company" className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="Flowbite" required />
-        </div>  
-        <div>
-            <label className="block mb-2.5 text-sm font-medium text-heading">Phone number</label>
-            <input type="tel" id="phone" className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="123-45-678" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" required />
-        </div>
-        <div>
-            <label className="block mb-2.5 text-sm font-medium text-heading">Website URL</label>
-            <input type="url" id="website" className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="flowbite.com" required />
-        </div>
-        <div>
-            <label className="block mb-2.5 text-sm font-medium text-heading">Unique visitors (per month)</label>
-            <input type="number" id="visitors" className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="" required />
-        </div>
-    </div>
-    <div className="mb-6">
-        <label  className="block mb-2.5 text-sm font-medium text-heading">Email address</label>
-        <input type="email" id="email" className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="john.doe@company.com" required />
-    </div> 
-    <div className="mb-6">
-        <label className="block mb-2.5 text-sm font-medium text-heading">Password</label>
-        <input type="password" id="password" className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="•••••••••" required />
-    </div> 
-    <div className="mb-6">
-        <label  className="block mb-2.5 text-sm font-medium text-heading">Confirm password</label>
-        <input type="password" id="confirm_password" className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="•••••••••" required />
-    </div> 
-    <div className="flex items-start mb-6">
-        <div className="flex items-center h-5">
-        <input id="remember" type="checkbox" value="" className="w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft" required />
-        </div>
-        <label  className="ms-2 text-sm font-medium text-heading">I agree with the <a href="#" className="text-fg-brand hover:underline">terms and conditions</a>.</label>
-    </div>
-    <button type="submit" className="text-white bg-brand box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">Submit</button>
-</form>
+      <form onSubmit={handleSubmit}>
+          <div className="grid gap-6 mb-6 md:grid-cols-2">
+            <div>
+              <label className="block mb-2.5 text-sm font-medium text-heading">First name</label>
+              <input type="text" id="first_name" name="first_name" value={formData.first_name} onChange={(handleChange)} className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="John" required />
+            </div>
+            <div>
+              <label className="block mb-2.5 text-sm font-medium text-heading">Last name</label>
+              <input type="text" id="last_name" name="last_name" value={formData.last_name} onChange={handleChange} className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="Doe" required />
+            </div>
+            <div>
+              <label className="block mb-2.5 text-sm font-medium text-heading">Company</label>
+              <input type="text" id="company" name="company" value={formData.company} onChange={handleChange} className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="Flowbite" required />
+            </div>
+            <div>
+              <label className="block mb-2.5 text-sm font-medium text-heading">Phone number</label>
+              <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleChange} className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="123-45-678" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" required />
+            </div>
+            <div>
+              <label className="block mb-2.5 text-sm font-medium text-heading">Website URL</label>
+              <input type="url" id="website" name="website" value={formData.website} onChange={handleChange} className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="flowbite.com" required />
+            </div>
+            <div>
+              <label className="block mb-2.5 text-sm font-medium text-heading">Unique visitors (per month)</label>
+              <input type="number" id="visitors" name="visitors" value={formData.visitors} onChange={handleChange} className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="" required />
+            </div>
+          </div>
+          <div className="mb-6">
+            <label className="block mb-2.5 text-sm font-medium text-heading">Email address</label>
+            <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="john.doe@company.com" required />
+          </div>
+          <div className="mb-6">
+            <label className="block mb-2.5 text-sm font-medium text-heading">Password</label>
+            <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="•••••••••" required />
+          </div>
+          <div className="mb-6">
+            <label className="block mb-2.5 text-sm font-medium text-heading">Confirm password</label>
+            <input type="password" id="confirm_password" name="confirm_password" value={formData.confirm_password} onChange={handleChange} className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="•••••••••" required />
+          </div>
+          <div className="flex items-start mb-6">
+            <div className="flex items-center h-5">
+              <input id="remember" name="remember" type="checkbox" checked={formData.remember} onChange={handleChange} className="w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft" required />
+            </div>
+            <label className="ms-2 text-sm font-medium text-heading">I agree with the <a href="#" className="text-fg-brand hover:underline">terms and conditions</a>.</label>
+          </div>
+          <button type="submit" className="text-white bg-brand box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">Submit</button>
+        </form>
         </main>     
     </div>
   );                        
