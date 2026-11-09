@@ -19,6 +19,7 @@ const initialState = {
 export default function Forms() {
 
     const [formData, setFormData] = useState(initialState);
+    const [isMessage, setIsMessage] = useState(false);
 
   // Appelée à chaque modification d'un champ
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -40,7 +41,13 @@ export default function Forms() {
 
     console.log(formData); // affiche les champs renseignés
     // setFormData(initialState); // réinitialise le formulaire
+    setIsMessage(true); // Affiche le message de succès
+    setTimeout(() => {
+      setIsMessage(false); // Masque le message de succès après 3 secondes
+      setFormData(initialState); // Réinitialise le formulaire
+    }, 10000);
   };
+  
 
   return (
     <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
@@ -100,6 +107,11 @@ export default function Forms() {
             <label className="ms-2 text-sm font-medium text-heading">I agree with the <a href="#" className="text-fg-brand hover:underline">terms and conditions</a>.</label>
           </div>
           <button type="submit" className="text-white bg-brand box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">Submit</button>
+          {isMessage && (
+            <div className="mt-4 text-green-600 font-medium">
+              Form submitted successfully!
+            </div>
+          )}
         </form>
         </main>     
     </div>
