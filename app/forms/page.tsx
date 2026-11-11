@@ -41,9 +41,21 @@ export default function Forms() {
 
     console.log(formData); // affiche les champs renseignés
     // setFormData(initialState); // réinitialise le formulaire
+
+     // On retire les mots de passe avant de sauvegarder
+    //  eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { password, confirm_password, ...dataToSave } = formData;
+
+  // On récupère les anciennes soumissions (ou un tableau vide)
+  const saved = JSON.parse(localStorage.getItem("formSubmissions") || "[]");
+
+  // On ajoute la nouvelle, puis on sauvegarde
+  saved.push(dataToSave);
+  localStorage.setItem("formSubmissions", JSON.stringify(saved));
+
     setIsMessage(true); // Affiche le message de succès
     setTimeout(() => {
-      setIsMessage(false); // Masque le message de succès après 3 secondes
+      setIsMessage(false); // Masque le message de succès après 10 secondes
       setFormData(initialState); // Réinitialise le formulaire
     }, 10000);
   };
@@ -53,11 +65,11 @@ export default function Forms() {
     <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
         <div className="flex flex-row" >
-          <Link href="/about" type="button" className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-base text-sm px-4 py-2.5 text-center rounded-[10px] leading-5 mr-5 mb-5">About</Link>
-          <Link href="/dashboard" type="button" className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-base text-sm px-4 py-2.5 text-center rounded-[10px] leading-5 mb-5">Dashboard</Link>
-          <Link href="/forms" type="button" className="inline-flex items-center  text-white bg-blue-500 hover:bg-blue-600 box-border border border-transparent focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none rounded-[10px] ml-5 mb-5">
+          <Link href="/about" type="button" className="text-white bg-linear-to-br from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-base text-sm px-4 py-2.5 text-center rounded-[10px] leading-5 mr-5 mb-5">About</Link>
+          <Link href="/dashboard" type="button" className="text-white bg-linear-to-br from-green-400 via-green-500 to-green-600 hover:bg-linear-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium text-sm px-4 py-2.5 text-center rounded-[10px] leading-5 mb-5">Dashboard</Link>
+          <Link href="/forms" type="button" className="inline-flex items-center  text-white bg-blue-500 hover:bg-blue-600 box-border border border-transparent focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 shadow-xs font-medium leading-5 text-sm px-4 py-2.5 focus:outline-none rounded-[10px] ml-5 mb-5">
             Forms</Link>
-            <Link href="/tables"  type="button" className="text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 shadow-lg shadow-teal-500/50 dark:shadow-lg dark:shadow-teal-800/80 font-medium rounded-base text-sm px-4 py-2.5 text-center rounded-[10px] ml-5 mb-5 leading-5">
+            <Link href="/tables"  type="button" className="text-white bg-linear-to-br from-teal-400 via-teal-500 to-teal-600 hover:bg-linear-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 shadow-lg shadow-teal-500/50 dark:shadow-lg dark:shadow-teal-800/80 font-medium text-sm px-4 py-2.5 text-center rounded-[10px] ml-5 mb-5 leading-5">
               Tables
             </Link>
         </div>
@@ -108,7 +120,7 @@ export default function Forms() {
           </div>
           <button type="submit" className="text-white bg-brand box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">Submit</button>
           {isMessage && (
-            <div className="mt-4 text-green-600 font-medium">
+            <div className="mt-4 p-4 rounded-lg bg-green-300 text-white font-medium">
               Form submitted successfully!
             </div>
           )}
